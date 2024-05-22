@@ -149,13 +149,6 @@ class CheckoutSubscriber implements EventSubscriberInterface
             if (!$isOrderTransactionStateOpen) { // order payment status is open or in progress
                 return;
             }
-
-            $isWeArePlanetEmail = isset($templateData[OrderMailService::EMAIL_ORIGIN_IS_WEAREPLANET]);
-
-            if (!$isWeArePlanetEmail) {
-                $this->logger->info('Email disabled for ', ['orderId' => $order->getId()]);
-                $event->stopPropagation();
-            }
         }
     }
 
@@ -172,7 +165,7 @@ class CheckoutSubscriber implements EventSubscriberInterface
                 $this->removeWeArePlanetPaymentMethodFromConfirmPage($event);
             }
 
-            $createdTransactionId = $this->transactionService->createPendingTransaction($event);
+            $createdTransactionId = $this->transactionService->createPendingTransaction($salesChannelContext, $event);
             $this->updateTempTransactionIfNeeded($salesChannelContext, $createdTransactionId);
 
             $this->getAvailablePaymentMethods($settings, $createdTransactionId);
@@ -249,9 +242,7 @@ class CheckoutSubscriber implements EventSubscriberInterface
         $currencyCheck = $_SESSION['currencyCheck'] ?? null;
 
         $customer = $salesChannelContext->getCustomer();
-        $customerBillingAddress = $customer->getActiveBillingAddress();
-
-        $addressHash = md5(json_encode((array)$customerBillingAddress));
+        $addressHash = md5(json_encode((array)$customer));
         $currency = $salesChannelContext->getCurrency()->getIsoCode();
         if (($addressCheck && $currencyCheck) && $addressCheck !== $addressHash || $currencyCheck !== $currency) {
             if ($createdTransactionId) {

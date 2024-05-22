@@ -1,3 +1,18 @@
+# 6.1.3
+- Solvency check support for Powerpay and MF Group Invoice payment methods
+- Improved handling of abandoned transactions
+
+# 6.1.2
+- Fixed redirect to confirmation page after reload
+
+# 6.1.1
+- Fixed deprecated OrderNotFoundException
+
+# 6.1.0
+- Fixed checkout issues after deactivating/activating plugin
+- Fixed plugin uninstall action
+- Fixed invoice payment method email function when order is shipped
+
 # 6.0.0
 - Support for Shopware 6.6
 

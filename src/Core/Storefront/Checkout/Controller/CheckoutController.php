@@ -5,8 +5,7 @@ namespace WeArePlanetPayment\Core\Storefront\Checkout\Controller;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\{
 	Checkout\Cart\Cart,
-	Checkout\Cart\Exception\CustomerNotLoggedInException,
-	Checkout\Cart\Exception\OrderNotFoundException,
+	Checkout\Cart\CartException,
 	Checkout\Cart\LineItemFactoryRegistry,
 	Checkout\Cart\SalesChannel\CartService,
 	Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection,
@@ -177,7 +176,6 @@ class CheckoutController extends StorefrontController {
 				TransactionState::AUTHORIZED,
 				TransactionState::COMPLETED,
 				TransactionState::FULFILL,
-				TransactionState::PROCESSING,
 			]
 		)) {
 			return $this->redirect($transaction->getSuccessUrl(), Response::HTTP_MOVED_PERMANENTLY);
@@ -320,14 +318,14 @@ class CheckoutController extends StorefrontController {
 				->load(new Request(), $salesChannelContext, $criteria)
 				->getOrders();
 		} catch (InvalidUuidException $e) {
-			throw new OrderNotFoundException($orderId);
+			throw CartException::orderNotFound($orderId);
 		}
 
 		/** @var OrderEntity|null $order */
 		$order = $searchResult->get($orderId);
 
 		if (!$order) {
-			throw new OrderNotFoundException($orderId);
+			throw CartException::orderNotFound($orderId);
 		}
 
 		return $order;
