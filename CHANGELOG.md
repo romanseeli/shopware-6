@@ -1,3 +1,10 @@
+# 6.1.5
+- Support for Shopware 6.6.3.1 and Vue 3
+
+# 6.1.4
+- Improved plugin's settings form
+- Support for Shopware 6.6.2.0
+
 # 6.1.3
 - Solvency check support for Powerpay and MF Group Invoice payment methods
 - Improved handling of abandoned transactions
