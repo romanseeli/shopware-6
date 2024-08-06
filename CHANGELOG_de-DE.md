@@ -1,3 +1,6 @@
+# 6.1.6
+- Versionserhöhung für das SDK
+
 # 6.1.5
 - Unterstützung von Shopware 6.6.3.1 und Vue 3
 
